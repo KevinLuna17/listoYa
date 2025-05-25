@@ -1,3 +1,5 @@
+"use client";
+
 import { MagnifyingGlassIcon, InformationCircleIcon } from "@heroicons/react/24/solid"
 
 function Header() {
@@ -21,9 +23,11 @@ function Header() {
       </div>
 
       <div className="flex items-center justify-center px-5 py-2 md:py-5">
-        <p className="flex items-center text-sm font-light pr-5 p-5 shadow-xl rounded-xl w-fit italic bg-white max-w-3xl text-gray-500">
+        <p className="flex items-center text-sm font-light pr-5 p-5 shadow-xl rounded-xl w-fit italic bg-white max-w-3xl text-gray-500 text-pretty">
           <InformationCircleIcon className="inline-block size-10 mr-1"/>
-          Escribe todas tus tareas por hacer</p>
+          Escribe todas tus ideas y metas pendientes por hacer y pasalas de pendientes a realizadas.
+          Enfocate y di Listo Ya!
+          </p>
       </div>
     </header>
 
