@@ -3,6 +3,8 @@
 import { Draggable, Droppable } from "react-beautiful-dnd"
 import TodoCard from "./TodoCard";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useBoardStore } from "@/store/BoardStore";
+import { todo } from "node:test";
 
 type Props = {
     id: TypedColumn;
@@ -19,6 +21,9 @@ const idToColumnText: {
 };
 
 function Column({ id, todos, index }: Props) {
+    const searchString = useBoardStore((state) => state.searchString);
+    //const setSearchString = useBoardStore((state) => state.setSearchString);
+
   return (
     <Draggable
     draggableId={id}
@@ -39,11 +44,21 @@ function Column({ id, todos, index }: Props) {
                         className={`p-2 rounded-2xl shadow-sm ${snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"}`}
                         >
                             <h2 className="flex justify-between font-bold text-xl p-2">{idToColumnText[id]}
-                                <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">{todos.length}</span>
+                                <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">
+                                    {!searchString ? todos.length : todos.filter(todo => todo.title.toLowerCase().includes(searchString.toLowerCase())).length}
+                                </span>
                             </h2>
 
                             <div className="space-y-2">
-                               {todos.map((todo, index) => (
+                               {todos.map((todo, index) => {
+                                if (
+                                    searchString && 
+                                    !todo.title
+                                        .toLowerCase()
+                                        .includes(searchString.toLowerCase())
+                                )
+                                    return null;
+                                return(
                                 <Draggable
                                 key={todo.$id}
                                 draggableId={todo.$id}
@@ -60,7 +75,7 @@ function Column({ id, todos, index }: Props) {
                                         />
                                     )}
                                 </Draggable>
-                               ))}
+                               )})}
 
                                {provided.placeholder}
 

@@ -4,6 +4,7 @@ import { useBoardStore } from '@/store/BoardStore';
 import { useEffect } from 'react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import Column from './Column';
+import { shallow } from 'zustand/shallow';
 
 function Board() {
     //when you have more than 1 thing in your store you need to do an array
@@ -86,7 +87,7 @@ function Board() {
 
             // Update in DB
             updateTodoInDB(todoMoved, finishCol.id);
-            
+
             setBoardState({ ...board, columns: newColumns });
         }
     };

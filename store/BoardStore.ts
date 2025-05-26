@@ -1,6 +1,5 @@
 import { databases } from '@/appwrite';
 import { getTodosGroupByColumn } from '@/lib/getTodosGroupByColumn';
-import { title } from 'process';
 import { create } from 'zustand'
 
 interface BoardState {
@@ -8,12 +7,17 @@ interface BoardState {
     getBoard: () => void;
     setBoardState: (board: Board) => void;
     updateTodoInDB: (todo: Todo, columnId: TypedColumn) => void;
+    // Implement Search functionality
+    searchString: string;
+    setSearchString: (searchString: string) => void;
 }
 
 export const useBoardStore = create<BoardState>((set) => ({
   board: {
     columns: new Map<TypedColumn, Column>(),
   },
+  searchString: "",
+  setSearchString: (searchString) => set({ searchString }),
 
   getBoard: async () => {
     const board = await getTodosGroupByColumn();
