@@ -7,23 +7,32 @@ import Column from './Column';
 
 function Board() {
     //when you have more than 1 thing in your store you need to do an array
-    const getBoard = useBoardStore((state) => state.getBoard);     
     const board = useBoardStore((state) => state.board);
+    const getBoard = useBoardStore((state) => state.getBoard);
+    const setBoardState = useBoardStore((state) => state.setBoardState);
+     
 
     useEffect(() => {
         getBoard();
     }, [getBoard]);
-
-    console.log(board);
     
     const handleOnDragEnd = (result: DropResult) => {
         const { destination, source, type } = result;
 
-        console.log(destination);
-        console.log(source);
-        console.log(type);
-        
-        
+        // Check if user dragged card outside of board
+        if (!destination) return;
+
+        // Handle column drag
+        if (type==="column") {
+            const entries = Array.from(board.columns.entries());
+            const [removed] = entries.splice(source.index, 1);
+            entries.splice(destination.index, 0, removed);
+            const rearrangedColumns = new Map(entries);
+            setBoardState({
+                ...board, 
+                columns: rearrangedColumns,
+            })
+        }
         
     };
     
@@ -39,8 +48,7 @@ function Board() {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 >
-                    {
-                    Array.from(board.columns.entries()).map(([id, column],index) => (
+                    {Array.from(board.columns.entries()).map(([id, column],index) => (
                     <Column 
                     key={id}
                     id={id}
