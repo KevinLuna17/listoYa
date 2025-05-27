@@ -1,10 +1,9 @@
 "use client";
 
-import { Draggable, Droppable } from "react-beautiful-dnd"
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import TodoCard from "./TodoCard";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useBoardStore } from "@/store/BoardStore";
-import { todo } from "node:test";
+import Modal from "./Modal";
 
 type Props = {
     id: TypedColumn;
@@ -22,18 +21,18 @@ const idToColumnText: {
 
 function Column({ id, todos, index }: Props) {
     const searchString = useBoardStore((state) => state.searchString);
-    //const setSearchString = useBoardStore((state) => state.setSearchString);
 
   return (
     <Draggable
-    draggableId={id}
-    index={index}
+        draggableId={id}
+        index={index}
     >
         {(provided) => (
             <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
+            className="px-4 md:px-0 lg:px-0"
             >
                 {/* render droppable todos in the column */}
                 <Droppable droppableId={index.toString()} type="card">
@@ -41,7 +40,7 @@ function Column({ id, todos, index }: Props) {
                         <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className={`p-2 rounded-2xl overflow-hidden shadow-sm ${snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"}`}
+                        className={`p-2 rounded-2xl overflow-hidden shadow-sm ${snapshot.isDraggingOver ? "bg-green-200" : "bg-gray-500/50"}`}
                         >
                             <h2 className="flex justify-between font-bold text-xl p-2">{idToColumnText[id]}
                                 <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 text-sm font-normal">
@@ -58,31 +57,34 @@ function Column({ id, todos, index }: Props) {
                                         .includes(searchString.toLowerCase())
                                 )
                                     return null;
-                                return(
-                                <Draggable
-                                key={todo.$id}
-                                draggableId={todo.$id}
-                                index={index}
-                                >
-                                    {(provided) => (
-                                        <TodoCard 
-                                        todo={todo}
+
+                                return (
+                                    <Draggable
+                                        key={todo.$id}
+                                        draggableId={todo.$id}
                                         index={index}
-                                        id={id}
-                                        innerRef={provided.innerRef}
-                                        draggableProps={provided.draggableProps}
-                                        dragHandleProps={provided.dragHandleProps}
-                                        />
-                                    )}
-                                </Draggable>
-                               )})}
+                                    >
+                                        {(provided) => (
+                                            <TodoCard 
+                                                todo={todo}
+                                                index={index}
+                                                id={id}
+                                                innerRef={provided.innerRef}
+                                                draggableProps={provided.draggableProps}
+                                                dragHandleProps={provided.dragHandleProps}
+                                            />
+                                        )}
+                                    </Draggable>
+                                    );
+                                })}
 
                                {provided.placeholder}
 
                                <div className="flex items-end justify-end p-2">
-                                <button className="text-green-500 hover:text-green-600">
+                                <Modal />
+                                {/* <button onClick={openModal} className="text-green-500 hover:text-green-600">
                                     <PlusCircleIcon className="size-10"/>
-                                </button>
+                                </button> */}
                                </div>
                             </div>
                         </div>
