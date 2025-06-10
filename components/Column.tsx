@@ -4,6 +4,8 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import TodoCard from "./TodoCard";
 import { useBoardStore } from "@/store/BoardStore";
 import Modal from "./Modal";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useModalStore } from "@/store/ModalStore";
 
 type Props = {
     id: TypedColumn;
@@ -21,6 +23,13 @@ const idToColumnText: {
 
 function Column({ id, todos, index }: Props) {
     const searchString = useBoardStore((state) => state.searchString);
+    const setNewTaskType = useBoardStore((state) => state.setNewTaskType);
+    const openModal = useModalStore((state) => state.openModal);
+
+    const handleAddTodo = () => {
+       setNewTaskType(id);
+       openModal();
+    }
 
   return (
     <Draggable
@@ -81,10 +90,10 @@ function Column({ id, todos, index }: Props) {
                                {provided.placeholder}
 
                                <div className="flex items-end justify-end p-2">
-                                <Modal />
-                                {/* <button onClick={openModal} className="text-green-500 hover:text-green-600">
+                                {/* <Modal /> */}
+                                <button onClick={handleAddTodo} className="text-green-500 hover:text-green-600">
                                     <PlusCircleIcon className="size-10"/>
-                                </button> */}
+                                </button>
                                </div>
                             </div>
                         </div>
